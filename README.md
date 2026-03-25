@@ -15,7 +15,7 @@
 
 ## Installation
 
-скачивайте файл Pythone
+скачивайте файл PyCharm
 
 ## Usage
 
