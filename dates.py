@@ -33,128 +33,231 @@ if tx == "1":
         return result
 
     def block_trigonom() :
+        import math
         cos = math.cos
         asin = math.asin
         atan = math.atan
         acos = math.acos
         degrees = math.degrees
         radians = math.radians
+        sin = math.sin  # Добавлено для полноты
+        tan = math.tan  # Добавлено для полноты
         while True :
-            num = get_float("Введите число или pi или e или y или ф: ")
-            operation = input("sin, cos, tg, ctg, sec, csc, asin, acos, atg, actg, asec, acsc: ")
-            gr = input("degrees, radians: ")
-            if gr == "degrees" :
-                dnum = degrees(num)
-                if operation == "sin" :
-                    if dnum == 0 :
-                        print("0", "  ° = ", "0", " радиан", sep="", end="\n")
-                    else :
-                        print(sin(dnum), " ° = ", radians(sin(dnum)), " радиан", sep="", end="\n")
-                elif operation == "cos" :
-                    if dnum == 0 :
-                        print("1", " ° = ", "1", " радиан", sep="", end="\n")
-                    else :
-                        print(cos(dnum), " ° = ", radians(cos(dnum)), " радиан", sep="", end="\n")
-                elif operation == "tg" :
-                    if dnum == 0 :
-                        print("0", " ° = ", "0", " радиан", sep="", end="\n")
-                    else :
-                        print(tan(dnum), " ° = ", radians(tan(dnum)), " радиан", sep="", end="\n")
-                elif operation == "ctg" :
-                    if dnum == 0 :
-                        print("0", " ° = ", "0", " радиан", sep="", end="\n")
-                    else :
-                        print(1 / tan(dnum), " ° = ", radians(1 / tan(dnum)), " радиан", sep="", end="\n")
-                elif operation == "sec" :
-                    print(1 / cos(dnum), " ° = ", radians(1 / cos(dnum)), " радиан", sep="", end="\n")
-                elif operation == "csc" :
-                    print(1 / sin(dnum), " ° = ", radians(1 / sin(dnum)), " радиан", sep="", end="\n")
-                elif operation == "asin" :
-                    if not -1 <= num <= 1 :
-                        print("Найти арксинус можно только от -1 до 1 ")
-                        break
-                    else :
-                        print(asin(dnum), " ° = ", radians(asin(dnum)), " радиан", sep="", end="\n")
-                elif operation == "acos" :
-                    if not -1 <= num <= 1 :
-                        print("Найти арккосинус можно только от -1 до 1 ")
-                        break
-                    else :
-                        print(acos(dnum), " ° = ", radians(acos(dnum)), " радиан", sep="", end="\n")
-                elif operation == "atg" :
-                    print(atan(dnum), " ° = ", radians(atan(dnum)), " радиан", sep="", end="\n")
-                elif operation == "actg" :
-                    if dnum > 0 :
-                        print(atan(1 / dnum), " ° = ", radians(atan(1 / dnum)), " радиан", sep="", end="\n")
-                    elif dnum < 0 :
-                        print(atan(1 / dnum) + pi, " ° = ", radians(atan(1 / dnum) + pi), " радиан", sep="", end="\n")
-                    elif dnum == 0 :
-                        print(pi / 2, " ° = ", radians(pi / 2), " радиан", sep="", end="\n")
-                elif operation == "asec" :
-                    print(acos(1 / dnum), " ° = ", radians(acos(1 / dnum)), " радиан", sep="", end="\n")
-                elif operation == "acsc" :
-                    print(asin(1 / dnum), " ° = ", radians(asin(1 / dnum)), " радиан", sep="", end="\n")
+            # Ввод числа (или специальных значений)
+            num_str = input("Введите число или pi или e или y или 'дробь': ")
+            num = None  # Инициализация для избежания ошибок
+            try :
+                if num_str.lower() == "pi" :
+                    num = math.pi
+                elif num_str.lower() == "e" :
+                    num = math.e
+                elif num_str.lower() == "y" :  # Предполагаем, что 'y' означает какое-то другое значение, если нет, удалите
+                    num = y  # Замените на реальное значение y, если оно есть
+                elif num_str.lower() == "дробь" :
+                    fraction_input = input("Введите в формате 'числитель/знаменатель': ")
+                    from fractions import Fraction  # Импорт здесь, если он нужен только здесь
+                    num = Fraction(fraction_input)
                 else :
-                    print("Ошибка! Выберете функцию из списка!")
+                    num = float(num_str)
+            except ValueError :
+                print("Ошибка ввода числа!")
+                continue
+            except NameError :  # На случай, если 'y' не определено
+                print("Ошибка: 'y' не определено. Пожалуйста, введите другое значение.")
+                continue
+            except ZeroDivisionError :
+                print("Ошибка: Деление на ноль в дроби.")
+                continue
+            operation = input("Введите операцию (sin, cos, tan, cot, sec, csc, asin, acos, atan, acot, asec, acsc): ")
+
+            valid_operations = ["sin", "cos", "tan", "cot", "sec", "csc", "asin", "acos", "atan", "acot", "asec",
+                                "acsc"]
+            if operation not in valid_operations :
+                print("Ошибка! Выберите одну из следующих функций: ", ", ".join(valid_operations))
+                break
+            gr = input("Укажите единицы измерения для вывода (degrees/radians): ")
+            if gr.lower() == "degrees" :
+                try :
+                    angle_in_radians = None
+                    if isinstance(num, (int, float, complex)) :  # Если num - обычное число
+                        if gr.lower() == "degrees" :  # Это означает, что пользователь ввел число как градусы
+                            angle_in_radians = radians(num)
+                        else :  # Пользователь ввел число как радианы
+                            angle_in_radians = num
+                    elif isinstance(num, Fraction) :  # Если num - дробь
+                        pass  # Добавьте здесь обработку дробей, если нужно
+                    if operation in ["sin", "cos", "tan", "cot", "sec", "csc"] :
+                        result_rad = None
+                        if operation == "sin" :
+                            result_rad = sin(angle_in_radians)
+                        elif operation == "cos" :
+                            result_rad = cos(angle_in_radians)
+                        elif operation == "tan" :
+                            result_rad = tan(angle_in_radians)
+                        elif operation == "cot" :
+                            if tan(angle_in_radians) == 0 :
+                                print("Ошибка: Деление на ноль (тангенс равен 0).!")
+                                continue
+                            result_rad = 1 / tan(angle_in_radians)
+                        elif operation == "sec" :
+                            if cos(angle_in_radians) == 0 :
+                                print("Ошибка: Деление на ноль (косинус равен 0).!")
+                                continue
+                            result_rad = 1 / cos(angle_in_radians)
+                        elif operation == "csc" :
+                            if sin(angle_in_radians) == 0 :
+                                print("Ошибка: Деление на ноль (синус равен 0).!")
+                                continue
+                            result_rad = 1 / sin(angle_in_radians)
+                        if gr.lower() == "degrees" :
+                            display_value = degrees(result_rad)
+                            print(f"{operation}({num}°)" if isinstance(num, (int, float)) else print(
+                                f"{operation}({num})"), "=", f"{result_rad:.6f}", " (в градусах)", sep=" ")
+                            break
+                        else :  # gr.lower() == "radians"
+                            print(f"{operation}({num} рад)" if isinstance(num, (int, float)) else print(
+                                f"{operation}({num})"), "=", f"{result_rad:.6f}", " (в радианах)", sep=" ")
+                            break
+                    elif operation in ["asin", "acos", "atan", "acot", "asec", "acsc"] :
+                        result_rad = None
+                        if operation in ["asin", "acos"] and not (-1 <= num <= 1) :
+                            print(
+                                f"Ошибка: Арксинус/Арккосинус можно найти только для чисел от -1 до 1. Получено: {num}")
+                            continue
+                        if operation == "asec" and not (abs(num) >= 1) :
+                            print(
+                                f"Ошибка: Арксеканс можно найти только для чисел, модуль которых >= 1. Получено: {num}")
+                            continue
+                        if operation == "acsc" and not (abs(num) >= 1) :
+                            print(
+                                f"Ошибка: Арккосеканс можно найти только для чисел, модуль которых >= 1. Получено: {num}")
+                            continue
+                        if operation == "asin" :
+                            result_rad = asin(num)
+                        elif operation == "acos" :
+                            result_rad = acos(num)
+                        elif operation == "atan" :
+                            result_rad = atan(num)
+                        elif operation == "acot" :
+                            if num == 0 :
+                                result_rad = math.pi / 2
+                            else :
+                                result_rad = atan(1 / num)
+                                if num < 0 :
+                                    result_rad += math.pi
+                        elif operation == "asec" :
+                            if num == 0 :
+                                print("Ошибка: Невозможно вычислить арксеканс для 0.")
+                                continue
+                            result_rad = acos(1 / num)
+                        elif operation == "acsc" :
+                            if num == 0 :
+                                print("Ошибка: Невозможно вычислить арккосеканс для 0.")
+                                continue
+                            result_rad = asin(1 / num)
+                        if gr.lower() == "degrees" :
+                            if result_rad is not None :
+                                display_value_deg = degrees(result_rad)
+                                print(f"{operation}({num})" if not isinstance(num,(int, float)) else f"{operation}({num})","=", f"{display_value_deg:.6f}° (в градусах)", sep=" ")
+                        else :
+                            if result_rad is not None :
+                                print(f"{operation}({num})" if not isinstance(num,(int, float)) else f"{operation}({num})","=", f"{result_rad:.6f} рад (в радианах)", sep=" ")
+                    else :
+                        print("Неизвестная операция.")
+                        break
+                except ValueError :
+                    print("Ошибка при вычислении. Проверьте введенные данные.")
                     break
-            elif gr == "radians" :
-                rnum = radians(num)
-                if operation == "sin" :
-                    if rnum == 0 :
-                        print("0", " радиан = ", "0", "°", sep="", end="\n")
-                    else :
-                        print(sin(rnum), " радиан = ", degrees(sin(rnum)), "°", sep="", end="\n")
-                elif operation == "cos" :
-                    if rnum == 0 :
-                        print("1", " радиан = ", "1", "°", sep="", end="\n")
-                    else :
-                        print(cos(rnum), " радиан = ", degrees(cos(rnum)), "°", sep="", end="\n")
-                elif operation == "tg" :
-                    if rnum == 0 :
-                        print("0", " радиан = ", "0", "°", sep="", end="\n")
-                    else :
-                        print(tan(rnum), " радиан = ", degrees(tan(rnum)), "°", sep="", end="\n")
-                elif operation == "ctg" :
-                    if rnum == 0 :
-                        print("0", " радиан = ", "0", "°", sep="", end="\n")
-                    else :
-                        print(1 / tan(rnum), " радиан = ", degrees(1 / tan(rnum)), "°", sep="", end="\n")
-                elif operation == "sec" :
-                    print(1 / cos(rnum), " радиан = ", degrees(1 / cos(rnum)), "°", sep="", end="\n")
-                elif operation == "csc" :
-                    print(1 / sin(rnum), " радиан = ", degrees(1 / sin(rnum)), "°", sep="", end="\n")
-                elif operation == "asin" :
-                    if not -1 <= num <= 1 :
-                        print("Найти арксинус можно только от -1 до 1 ")
+                except ZeroDivisionError :
+                    print("Ошибка: Деление на ноль при вычислении.")
+                    break
+                except Exception as e :
+                    print(f"Произошла непредвиденная ошибка: {e}")
+                    break
+            elif gr.lower() == "radians" :
+                try :
+                    angle_in_radians = None
+                    if isinstance(num, (int, float, complex)) :
+                        angle_in_radians = num
+                    elif isinstance(num, Fraction) :
+                        pass
+                    if operation in ["sin", "cos", "tan", "cot", "sec", "csc"] :
+                        result_rad = None
+                        if operation == "sin" :
+                            result_rad = sin(angle_in_radians)
+                        elif operation == "cos" :
+                            result_rad = cos(angle_in_radians)
+                        elif operation == "tan" :
+                            result_rad = tan(angle_in_radians)
+                        elif operation == "cot" :
+                            if tan(angle_in_radians) == 0 : print("Ошибка: Деление на ноль."); continue
+                            result_rad = 1 / tan(angle_in_radians)
+                        elif operation == "sec" :
+                            if cos(angle_in_radians) == 0 : print("Ошибка: Деление на ноль."); continue
+                            result_rad = 1 / cos(angle_in_radians)
+                        elif operation == "csc" :
+                            if sin(angle_in_radians) == 0 : print("Ошибка: Деление на ноль."); continue
+                            result_rad = 1 / sin(angle_in_radians)
+
+                        print(f"{operation}({num})" if not isinstance(num, (int, float)) else print(
+                            f"{operation}({num})"), "=", f"{result_rad:.6f}", " радиан", sep=" ")
+                        break
+
+                    # --- Обратные тригонометрические функции ---
+                    elif operation in ["asin", "acos", "atan", "acot", "asec", "acsc"] :
+                        result_rad = None
+
+                        if operation in ["asin", "acos"] and not (-1 <= num <= 1) :
+                            print(
+                                f"Ошибка: Арксинус/Арккосинус можно найти только для чисел от -1 до 1. Получено: {num}")
+                            continue
+
+                        if operation == "asec" and not (abs(num) >= 1) :
+                            print(
+                                f"Ошибка: Арксеканс можно найти только для чисел, модуль которых >= 1. Получено: {num}")
+                            continue
+                        if operation == "acsc" and not (abs(num) >= 1) :
+                            print(
+                                f"Ошибка: Арккосеканс можно найти только для чисел, модуль которых >= 1. Получено: {num}")
+                            continue
+
+                        if operation == "asin" :
+                            result_rad = asin(num)
+                        elif operation == "acos" :
+                            result_rad = acos(num)
+                        elif operation == "atan" :
+                            result_rad = atan(num)
+                        elif operation == "acot" :
+                            if num == 0 :
+                                result_rad = math.pi / 2
+                            else :
+                                result_rad = atan(1 / num)
+                                if num < 0 : result_rad += math.pi
+                        elif operation == "asec" :
+                            if num == 0 : print("Ошибка: Невозможно вычислить арксеканс для 0."); continue
+                            result_rad = acos(1 / num)
+                        elif operation == "acsc" :
+                            if num == 0 : print("Ошибка: Невозможно вычислить арккосеканс для 0."); continue
+                            result_rad = asin(1 / num)
+
+                        print(f"{operation}({num})" if not isinstance(num, (int, float)) else print(
+                            f"{operation}({num})"), "=", f"{result_rad:.6f} рад", sep=" ")
                         break
                     else :
-                        print(asin(rnum), " радиан = ", degrees(asin(rnum)), "°", sep="", end="\n")
-                elif operation == "acos" :
-                    if not -1 <= num <= 1 :
-                        print("Найти арккосинус можно только от -1 до 1 ")
+                        print("Неизвестная операция.")
                         break
-                    else :
-                        print(acos(rnum), " радиан = ", degrees(acos(rnum)), "°", sep="", end="\n")
-                elif operation == "atg" :
-                    print(atan(rnum), " радиан = ", degrees(atan(rnum)), "°", sep="", end="\n")
-                elif operation == "actg" :
-                    if rnum > 0 :
-                        print(atan(1 / rnum), " радиан = ", degrees(atan(1 / rnum)), "°", sep="", end="\n")
-                    elif rnum < 0 :
-                        print(atan(1 / rnum) + pi, " радиан = ", degrees(atan(1 / rnum) + pi), "°", sep="", end="\n")
-                    elif rnum == 0 :
-                        print(pi / 2, " радиан = ", degrees(pi / 2), "°", sep="", end="\n")
-                elif operation == "asec" :
-                    print(acos(1 / rnum), " радиан = ", degrees(acos(1 / rnum)), "°", sep="", end="\n")
-                elif operation == "acsc" :
-                    print(asin(1 / rnum), " радиан = ", degrees(asin(1 / rnum)), "°", sep="", end="\n")
-                elif operation != "sin" or "cos" or 'tg' or "ctg" or 'sec' or 'csc' or 'asin' or 'acos' or 'atg' or 'actg' or 'asec' or "acsc" :
-                    print("Ошибка! Выберете функцию из списка!")
+                except ValueError :
+                    print("Ошибка при вычислении. Проверьте введенные данные.")
+                    break
+                except ZeroDivisionError :
+                    print("Ошибка: Деление на ноль при вычислении.")
+                    break
+                except Exception as e :
+                    print(f"Произошла непредвиденная ошибка: {e}")
                     break
             else :
-                print("Выберете градусную меру угла")
+                print("Ошибка! Пожалуйста, выберите 'degrees' или 'radians'.")
                 break
-
     def block_classic() :
             import functools
             import math
@@ -989,128 +1092,215 @@ elif tx == "2":
 
 
     def block_trigonom() :
-        cos = math.cos
-        asin = math.asin
-        atan = math.atan
-        acos = math.acos
-        degrees = math.degrees
-        radians = math.radians
+        import math
+        from math import pi, sin, cos, tan, degrees, radians, asin, acos, atan
+
+        def get_float(prompt) :
+            """
+            Prompts the user for input and attempts to convert it to a float.
+            Handles 'pi', 'e', and 'y' (interpreted after user's input of 'y'/'n' for continuation) as special cases.
+            """
+            while True :
+                value_str = input(prompt).lower()
+                try :
+                    if value_str == "pi" :
+                        return pi
+                    elif value_str == "e" :
+                        return math.e
+                    elif value_str == "y" :  # This case might need adjustment based on context
+                        return "y"  # Special token for "yes"
+                    else :
+                        return float(value_str)
+                except ValueError :
+                    print("Invalid input. Please enter a number, 'pi', 'e', or 'y'.")
+
         while True :
-            num = get_float("Enter the number or pi or e or y: ")
-            operation = input("sin, cos, tg, ctg, sec, csc, asin, acos, atg, actg, asec, acsc: ")
-            gr = input("degrees, radians: ")
-            if gr == "degrees" :
-                dnum = degrees(num)
-                if operation == "sin" :
-                    if dnum == 0 :
-                        print("0", "  ° = ", "0", " radians", sep="", end="\n")
-                    else :
-                        print(sin(dnum), " ° = ", radians(sin(dnum)), " radians", sep="", end="\n")
-                elif operation == "cos" :
-                    if dnum == 0 :
-                        print("1", " ° = ", "1", " radians", sep="", end="\n")
-                    else :
-                        print(cos(dnum), " ° = ", radians(cos(dnum)), " radians", sep="", end="\n")
-                elif operation == "tg" :
-                    if dnum == 0 :
-                        print("0", " ° = ", "0", " radians", sep="", end="\n")
-                    else :
-                        print(tan(dnum), " ° = ", radians(tan(dnum)), " radians", sep="", end="\n")
-                elif operation == "ctg" :
-                    if dnum == 0 :
-                        print("0", " ° = ", "0", " radians", sep="", end="\n")
-                    else :
-                        print(1 / tan(dnum), " ° = ", radians(1 / tan(dnum)), " radians", sep="", end="\n")
-                elif operation == "sec" :
-                    print(1 / cos(dnum), " ° = ", radians(1 / cos(dnum)), " radians", sep="", end="\n")
-                elif operation == "csc" :
-                    print(1 / sin(dnum), " ° = ", radians(1 / sin(dnum)), " radians", sep="", end="\n")
-                elif operation == "asin" :
-                    if not -1 <= num <= 1 :
-                        print("You can only find an arcinus from -1 to 1")
-                        break
-                    else :
-                        print(asin(dnum), " ° = ", radians(asin(dnum)), " radians", sep="", end="\n")
-                elif operation == "acos" :
-                    if not -1 <= num <= 1 :
-                        print("You can only find an arcosinus from -1 to 1")
-                        break
-                    else :
-                        print(acos(dnum), " ° = ", radians(acos(dnum)), " radians", sep="", end="\n")
-                elif operation == "atg" :
-                    print(atan(dnum), " ° = ", radians(atan(dnum)), " radians", sep="", end="\n")
-                elif operation == "actg" :
-                    if dnum > 0 :
-                        print(atan(1 / dnum), " ° = ", radians(atan(1 / dnum)), " radians", sep="", end="\n")
-                    elif dnum < 0 :
-                        print(atan(1 / dnum) + pi, " ° = ", radians(atan(1 / dnum) + pi), " radians", sep="", end="\n")
-                    elif dnum == 0 :
-                        print(pi / 2, " ° = ", radians(pi / 2), " radians", sep="", end="\n")
-                elif operation == "asec" :
-                    print(acos(1 / dnum), " ° = ", radians(acos(1 / dnum)), " radians", sep="", end="\n")
-                elif operation == "acsc" :
-                    print(asin(1 / dnum), " ° = ", radians(asin(1 / dnum)), " radians", sep="", end="\n")
-                else :
-                    print("Error! Select a function from the list!")
-                    break
-            elif gr == "radians" :
-                rnum = radians(num)
-                if operation == "sin" :
-                    if rnum == 0 :
-                        print("0", " radians = ", "0", "°", sep="", end="\n")
-                    else :
-                        print(sin(rnum), " radians = ", degrees(sin(rnum)), "°", sep="", end="\n")
-                elif operation == "cos" :
-                    if rnum == 0 :
-                        print("1", " radians = ", "1", "°", sep="", end="\n")
-                    else :
-                        print(cos(rnum), " radians = ", degrees(cos(rnum)), "°", sep="", end="\n")
-                elif operation == "tg" :
-                    if rnum == 0 :
-                        print("0", " radians = ", "0", "°", sep="", end="\n")
-                    else :
-                        print(tan(rnum), " radians = ", degrees(tan(rnum)), "°", sep="", end="\n")
-                elif operation == "ctg" :
-                    if rnum == 0 :
-                        print("0", " radians = ", "0", "°", sep="", end="\n")
-                    else :
-                        print(1 / tan(rnum), " radians = ", degrees(1 / tan(rnum)), "°", sep="", end="\n")
-                elif operation == "sec" :
-                    print(1 / cos(rnum), " radians = ", degrees(1 / cos(rnum)), "°", sep="", end="\n")
-                elif operation == "csc" :
-                    print(1 / sin(rnum), " radians = ", degrees(1 / sin(rnum)), "°", sep="", end="\n")
-                elif operation == "asin" :
-                    if not -1 <= num <= 1 :
-                        print("You can only find an arcinus from -1 to 1")
-                        break
-                    else :
-                        print(asin(rnum), " radians = ", degrees(asin(rnum)), "°", sep="", end="\n")
-                elif operation == "acos" :
-                    if not -1 <= num <= 1 :
-                        print("You can only find an arcosinus from -1 to 1")
-                        break
-                    else :
-                        print(acos(rnum), " radians = ", degrees(acos(rnum)), "°", sep="", end="\n")
-                elif operation == "atg" :
-                    print(atan(rnum), " radians = ", degrees(atan(rnum)), "°", sep="", end="\n")
-                elif operation == "actg" :
-                    if rnum > 0 :
-                        print(atan(1 / rnum), " radians = ", degrees(atan(1 / rnum)), "°", sep="", end="\n")
-                    elif rnum < 0 :
-                        print(atan(1 / rnum) + pi, " radians = ", degrees(atan(1 / rnum) + pi), "°", sep="", end="\n")
-                    elif rnum == 0 :
-                        print(pi / 2, " radians = ", degrees(pi / 2), "°", sep="", end="\n")
-                elif operation == "asec" :
-                    print(acos(1 / rnum), " radians = ", degrees(acos(1 / rnum)), "°", sep="", end="\n")
-                elif operation == "acsc" :
-                    print(asin(1 / rnum), " radians = ", degrees(asin(1 / rnum)), "°", sep="", end="\n")
-                elif operation != "sin" or "cos" or 'tg' or "ctg" or 'sec' or 'csc' or 'asin' or 'acos' or 'atg' or 'actg' or 'asec' or "acsc" :
-                    print("Error! Select a function from the list!")
-                    break
-            else :
-                print("Choose the degree measure of the angle!")
+            num_input = get_float("Enter the number, 'pi', 'e', or 'y': ")  # Get the number or constant
+            operation = input(
+                "Choose an operation (sin, cos, tg, ctg, sec, csc, asin, acos, atg, actg, asec, acsc): ").lower()
+            gr = input("Specify angle unit (degrees or radians): ").lower()
+
+            valid_operations = ["sin", "cos", "tg", "ctg", "sec", "csc", "asin", "acos", "atg", "actg", "asec", "acsc"]
+
+            if operation not in valid_operations :
+                print("Error! Select a function from the list!")
                 break
 
+            if gr == "degrees" :
+                # If the user enters a number and specifies 'degrees', we interpret the input as degrees.
+                # For calculations, this value needs to be converted to radians.
+                # The output can then be displayed in degrees or converted back to degrees.
+
+                angle_in_degrees = num_input
+                # Ensure input is a number before converting
+                if isinstance(angle_in_degrees, (int, float)) :
+                    angle_in_radians = radians(angle_in_degrees)  # Convert degrees to radians for calculations
+
+                    if operation == "sin" :
+                        result_rad = sin(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_degrees}° = {result_deg} °")  # Result in degrees is just conversio
+                    elif operation == "cos" :
+                        result_rad = cos(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_degrees}° = {result_deg} °")
+                    elif operation == "tg" :
+                        result_rad = tan(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_degrees}° = {result_deg} °")
+                    elif operation == "ctg" :
+                        result_rad = 1 / tan(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_degrees}° = {result_deg} °")
+                    elif operation == "sec" :
+                        result_rad = 1 / cos(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_degrees}° = {result_deg} °")
+                    elif operation == "csc" :
+                        result_rad = 1 / sin(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_degrees}° = {result_deg} °")
+
+                    # Inverse trigonometric functions return angles.
+                    # When 'degrees' is specified, we expect the input to be degrees of the *argument* for inverse functions.
+                    # The output of inverse functions should also be in degrees as requested by the unit input.
+                    elif operation == "asin" :
+                        if not -1 <= angle_in_degrees <= 1 :  # Argument for inverse functions is [-1, 1]
+                            print("Error: You can only find the arcsine of a value between -1 and 1.")
+                        else :
+                            result_rad = asin(angle_in_degrees)  # Calculate using the input as a value
+                            result_deg = degrees(result_rad)
+                            print(f"asin({angle_in_degrees}) = {result_deg}°")
+                    elif operation == "acos" :
+                        if not -1 <= angle_in_degrees <= 1 :
+                            print("Error: You can only find the arccosine of a value between -1 and 1.")
+                        else :
+                            result_rad = acos(angle_in_degrees)
+                            result_deg = degrees(result_rad)
+                            print(f"acos({angle_in_degrees}) = {result_deg}°")
+                    elif operation == "atg" :
+                        result_rad = atan(angle_in_degrees)
+                        result_deg = degrees(result_rad)
+                        print(f"atan({angle_in_degrees}) = {result_deg}°")
+                    elif operation == "actg" :
+                        if angle_in_degrees > 0 :
+                            result_rad = atan(1 / angle_in_degrees)
+                        elif angle_in_degrees < 0 :
+                            result_rad = atan(1 / angle_in_degrees) + pi
+                        else :  # angle_in_degrees == 0
+                            result_rad = pi / 2
+                        result_deg = degrees(result_rad)
+                        print(f"actg({angle_in_degrees}) = {result_deg}°")
+                    elif operation == "asec" :
+                        # Arccosecant expects an input value for which to find the angle.
+                        # The calculation uses 1/input for acos.
+                        if not abs(angle_in_degrees) >= 1 :
+                            print("Error: Invalid input for asec. Input must be >= 1 or <= -1.")
+                        else :
+                            result_rad = acos(1 / angle_in_degrees)
+                            result_deg = degrees(result_rad)
+                            print(f"asec({angle_in_degrees}) = {result_deg}°")
+                    elif operation == "acsc" :
+                        # Arccosecant expects an input value for which to find the angle.
+                        # The calculation uses 1/input for asin.
+                        if not abs(angle_in_degrees) >= 1 :
+                            print("Error: Invalid input for acsc. Input must be >= 1 or <= -1.")
+                        else :
+                            result_rad = asin(1 / angle_in_degrees)
+                            result_deg = degrees(result_rad)
+                            print(f"acsc({angle_in_degrees}) = {result_deg}°")
+                else :
+                    print("Error: For 'degrees' mode, please enter a numerical value for calculations.")
+
+
+            elif gr == "radians" :
+                # If the user enters a number and specifies 'radians', we use the input directly
+                # as it's already in the format that math functions expect.
+                # We then convert the output to degrees for display.
+
+                angle_in_radians = num_input  # Use the entered number as radians
+
+                if isinstance(angle_in_radians, (int, float)) :
+                    if operation == "sin" :
+                        result_rad = sin(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_radians} radians = {result_deg}°")
+                    elif operation == "cos" :
+                        result_rad = cos(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_radians} radians = {result_deg}°")
+                    elif operation == "tg" :
+                        result_rad = tan(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_radians} radians = {result_deg}°")
+                    elif operation == "ctg" :
+                        result_rad = 1 / tan(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_radians} radians = {result_deg}°")
+                    elif operation == "sec" :
+                        result_rad = 1 / cos(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_radians} radians = {result_deg}°")
+                    elif operation == "csc" :
+                        result_rad = 1 / sin(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"{angle_in_radians} radians = {result_deg}°")
+
+                    # Inverse trigonometric functions take values and return angles.
+                    # When 'radians' is specified for the unit, we expect the input value for inverse functions.
+                    # The output angle will be in radians and can be converted to degrees.
+                    elif operation == "asin" :
+                        if not -1 <= angle_in_radians <= 1 :  # Argument for inverse functions is [-1, 1]
+                            print("Error: You can only find the arcsine of a value between -1 and 1.")
+                        else :
+                            result_rad = asin(angle_in_radians)  # The input is the value, result is an angle in radians
+                            result_deg = degrees(result_rad)
+                            print(f"asin({angle_in_radians}) = {result_rad} radians")
+                    elif operation == "acos" :
+                        if not -1 <= angle_in_radians <= 1 :
+                            print("Error: You can only find the arccosine of a value between -1 and 1.")
+                        else :
+                            result_rad = acos(angle_in_radians)
+                            result_deg = degrees(result_rad)
+                            print(f"acos({angle_in_radians}) = {result_rad} radians")
+                    elif operation == "atg" :
+                        result_rad = atan(angle_in_radians)
+                        result_deg = degrees(result_rad)
+                        print(f"atan({angle_in_radians}) = {result_rad} radians")
+                    elif operation == "actg" :
+                        if angle_in_radians > 0 :
+                            result_rad = atan(1 / angle_in_radians)
+                        elif angle_in_radians < 0 :
+                            result_rad = atan(1 / angle_in_radians) + pi
+                        else :  # angle_in_radians == 0
+                            result_rad = pi / 2
+                        result_deg = degrees(result_rad)
+                        print(f"actg({angle_in_radians}) = {result_rad} radians")
+                    elif operation == "asec" :
+                        if not abs(angle_in_radians) >= 1 :
+                            print("Error: Invalid input for asec. Input must be >= 1 or <= -1.")
+                        else :
+                            result_rad = acos(1 / angle_in_radians)
+                            result_deg = degrees(result_rad)
+                            print(f"asec({angle_in_radians}) = {result_rad} radians")
+                    elif operation == "acsc" :
+                        if not abs(angle_in_radians) >= 1 :
+                            print("Error: Invalid input for acsc. Input must be >= 1 or <= -1.")
+                        else :
+                            result_rad = asin(1 / angle_in_radians)
+                            result_deg = degrees(result_rad)
+                            print(f"acsc({angle_in_radians}) = {result_rad} radians")
+                else :
+                    print("Error: For 'radians' mode, please enter a numerical value for calculations.")
+
+            else :
+                print("Error! Choose the angle measure of the angle (degrees or radians)!")
+                break
+
+            # Ask the user if they wish to continue
+            cont = input("Continue? (y/n): ")
+            if cont.lower() != 'y' :
+                break
 
     def block_classic() :
         import functools
