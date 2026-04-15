@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-> В нем есть дроби константы и разные математические функции
+> В нем есть дроби, константы и разные математические функции
 
 ## Table of Contents
 
