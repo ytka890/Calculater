@@ -4,13 +4,8 @@ while True:
     print("2)English")
     tx = input("Введите выбор / Enter the choice : ")
     if tx == "1":
-        # from functools import lru_cache
         import math
         import fractions
-
-
-        # import numpy as np
-
         def get_float(input_text):
             while True:
                 input_string = input(input_text)
@@ -31,10 +26,7 @@ while True:
                     break
                 except ValueError:
                     print("Ошибка! Введите число")
-
             return result
-
-
         def block_trigonom():
             import math
             cos = math.cos
@@ -43,29 +35,28 @@ while True:
             acos = math.acos
             degrees = math.degrees
             radians = math.radians
-            sin = math.sin  # Добавлено для полноты
-            tan = math.tan  # Добавлено для полноты
+            sin = math.sin
+            tan = math.tan
             while True:
-                # Ввод числа (или специальных значений)
                 num_str = input("Введите число или pi или e или y или 'дробь': ")
-                num = None  # Инициализация для избежания ошибок
+                num = None
                 try:
                     if num_str.lower() == "pi":
                         num = math.pi
                     elif num_str.lower() == "e":
                         num = math.e
-                    elif num_str.lower() == "y":  # Предполагаем, что 'y' означает какое-то другое значение, если нет, удалите
-                        num = y  # Замените на реальное значение y, если оно есть
+                    elif num_str.lower() == "y":
+                        num = y
                     elif num_str.lower() == "дробь":
                         fraction_input = input("Введите в формате 'числитель/знаменатель': ")
-                        from fractions import Fraction  # Импорт здесь, если он нужен только здесь
+                        from fractions import Fraction
                         num = Fraction(fraction_input)
                     else:
                         num = float(num_str)
                 except ValueError:
                     print("Ошибка ввода числа!")
                     continue
-                except NameError:  # На случай, если 'y' не определено
+                except NameError:
                     print("Ошибка: 'y' не определено. Пожалуйста, введите другое значение.")
                     continue
                 except ZeroDivisionError:
@@ -82,13 +73,13 @@ while True:
                 if gr.lower() == "degrees":
                     try:
                         angle_in_radians = None
-                        if isinstance(num, (int, float, complex)):  # Если num - обычное число
-                            if gr.lower() == "degrees":  # Это означает, что пользователь ввел число как градусы
+                        if isinstance(num, (int, float, complex)):
+                            if gr.lower() == "degrees":
                                 angle_in_radians = radians(num)
-                            else:  # Пользователь ввел число как радианы
+                            else:
                                 angle_in_radians = num
-                        elif isinstance(num, Fraction):  # Если num - дробь
-                            pass  # Добавьте здесь обработку дробей, если нужно
+                        elif isinstance(num, Fraction):
+                            pass
                         if operation in ["sin", "cos", "tan", "cot", "sec", "csc"]:
                             result_rad = None
                             if operation == "sin":
@@ -117,7 +108,7 @@ while True:
                                 print(f"{operation}({num}°)" if isinstance(num, (int, float)) else print(
                                     f"{operation}({num})"), "=", f"{result_rad:.6f}", " (в градусах)", sep=" ")
                                 break
-                            else:  # gr.lower() == "radians"
+                            else:
                                 print(f"{operation}({num} рад)" if isinstance(num, (int, float)) else print(
                                     f"{operation}({num})"), "=", f"{result_rad:.6f}", " (в радианах)", sep=" ")
                                 break
@@ -205,12 +196,9 @@ while True:
                             elif operation == "csc":
                                 if sin(angle_in_radians) == 0: print("Ошибка: Деление на ноль."); continue
                                 result_rad = 1 / sin(angle_in_radians)
-
                             print(f"{operation}({num})" if not isinstance(num, (int, float)) else print(
                                 f"{operation}({num})"), "=", f"{result_rad:.6f}", " радиан", sep=" ")
                             break
-
-                        # --- Обратные тригонометрические функции ---
                         elif operation in ["asin", "acos", "atan", "acot", "asec", "acsc"]:
                             result_rad = None
 
@@ -218,7 +206,6 @@ while True:
                                 print(
                                     f"Ошибка: Арксинус/Арккосинус можно найти только для чисел от -1 до 1. Получено: {num}")
                                 continue
-
                             if operation == "asec" and not (abs(num) >= 1):
                                 print(
                                     f"Ошибка: Арксеканс можно найти только для чисел, модуль которых >= 1. Получено: {num}")
@@ -227,7 +214,6 @@ while True:
                                 print(
                                     f"Ошибка: Арккосеканс можно найти только для чисел, модуль которых >= 1. Получено: {num}")
                                 continue
-
                             if operation == "asin":
                                 result_rad = asin(num)
                             elif operation == "acos":
@@ -246,7 +232,6 @@ while True:
                             elif operation == "acsc":
                                 if num == 0: print("Ошибка: Невозможно вычислить арккосеканс для 0."); continue
                                 result_rad = asin(1 / num)
-
                             print(f"{operation}({num})" if not isinstance(num, (int, float)) else print(
                                 f"{operation}({num})"), "=", f"{result_rad:.6f} рад", sep=" ")
                             break
@@ -265,8 +250,6 @@ while True:
                 else:
                     print("Ошибка! Пожалуйста, выберите 'degrees' или 'radians'.")
                     break
-
-
         def block_classic():
             import functools
             import math
@@ -311,7 +294,6 @@ while True:
                             for i in range(1, int(num1) + 1):
                                 result *= i
                             print(result)
-
                     else:
                         num2 = get_float("Введите второе число, pi, e, y или 'дробь' или ф: ")
                         if op == '1':
@@ -367,8 +349,6 @@ while True:
                     break
                 break
             return
-
-
         def block_compare():
             global factorial, pi, e, Fraction, sqrt, pow, cbrt, y, num1, num2, op
             factorial = math.factorial
@@ -397,8 +377,6 @@ while True:
                     print("Равенство равно")
                 else:
                     print("Выберите действие")
-
-
         def multiplicity():
             while True:
                 try:
@@ -419,8 +397,6 @@ while True:
                     print("кратно")
                 else:
                     print("не кратно")
-
-
         def block_square():
             while True:
                 op = input(
@@ -874,8 +850,6 @@ while True:
                     except ValueError:
                         print("Ошибка! Некорректный ввод первого числа.")
                         break
-
-
         def block_progressive():
             op2 = input("1)арифметическая прогрессия 2)геометрическая прогрессия 3)гармоническая прогрессия: ")
             if op2 == "1":
@@ -897,8 +871,6 @@ while True:
                 print("Гармоническая прогрессия построена ↓")
                 for i in range(1, n + 1):
                     print(1 / i)
-
-
         def block_addition():
             while True:
                 try:
@@ -942,8 +914,6 @@ while True:
                 num1 = get_float("Введите степень корня: ")
                 num2 = get_float("Введите число из которого извлекаем корень: ")
                 print(num2 ** (1 / num1))
-
-
         def block_percentage():
             op0 = input(
                 "Выберет 1)процент от числа  2)прибавить процент к числу  3)вычесть процент от числа  4)сколько составляет одно от другого: ")
@@ -967,13 +937,8 @@ while True:
                 num2 = get_float("Введите другое число: ")
                 total = (num1 / num2) * 100
                 print(total)
-
-
         def block_sistem():
             def decimal_to_base(decimal_num, base):
-                """
-                Конвертирует десятичное число в строку в указанной системе счисления.
-                """
                 if decimal_num == 0:
                     return '0'
                 digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -983,7 +948,6 @@ while True:
                     result = digits[remainder] + result
                     decimal_num //= base
                 return result
-
             def base_to_decimal(num_str, base):
                 digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 decimal_num = 0
@@ -999,7 +963,6 @@ while True:
             def display_menu():
                 print("1) Перевести из десятичной системы в другую")
                 print("2) Перевести из другой системы счисления в десятичную")
-
             def main():
                 while True:
                     display_menu()
@@ -1021,7 +984,6 @@ while True:
                             print("Ошибка ввода. Пожалуйста, введите корректное десятичное число и базу.")
                         except Exception as e:
                             print(f"Произошла непредвиденная ошибка: {e}")
-
                     elif choice == '2':
                         try:
                             num_str = input("Введите число (используйте 0-9 и A-Z): ")
@@ -1040,10 +1002,7 @@ while True:
                                 f"Произошла ошибка при переводе: {e}. Убедитесь, что символы числа соответствуют указанной базе.")
                     else:
                         print("Некорректный выбор. Пожалуйста, введите 1, 2 или 3.")
-
             main()
-
-
         print("Здравствуйте, вас приветствует умный калькулятор")
         while True:
             print("_____________________Меню_______________________")
@@ -1097,11 +1056,8 @@ while True:
                 break
             time.sleep(2)
     elif tx == "2":
-
         import math
         import fractions
-
-
         def get_float(input_text):
             while True:
                 input_string = input(input_text)
@@ -1120,19 +1076,11 @@ while True:
                     break
                 except ValueError:
                     print("Error! Enter the number")
-
             return result
-
-
         def block_trigonom():
             import math
             from math import pi, sin, cos, tan, degrees, radians, asin, acos, atan
-
             def get_float(prompt):
-                """
-                Prompts the user for input and attempts to convert it to a float.
-                Handles 'pi', 'e', and 'y' (interpreted after user's input of 'y'/'n' for continuation) as special cases.
-                """
                 while True:
                     value_str = input(prompt).lower()
                     try:
@@ -1146,33 +1094,23 @@ while True:
                             return float(value_str)
                     except ValueError:
                         print("Invalid input. Please enter a number, 'pi', 'e', or 'y'.")
-
             while True:
                 num_input = get_float("Enter the number, 'pi', 'e', or 'y': ")  # Get the number or constant
                 operation = input(
                     "Choose an operation (sin, cos, tg, ctg, sec, csc, asin, acos, atg, actg, asec, acsc): ").lower()
                 gr = input("Specify angle unit (degrees or radians): ").lower()
-
                 valid_operations = ["sin", "cos", "tg", "ctg", "sec", "csc", "asin", "acos", "atg", "actg", "asec", "acsc"]
-
                 if operation not in valid_operations:
                     print("Error! Select a function from the list!")
                     break
-
                 if gr == "degrees":
-                    # If the user enters a number and specifies 'degrees', we interpret the input as degrees.
-                    # For calculations, this value needs to be converted to radians.
-                    # The output can then be displayed in degrees or converted back to degrees.
-
                     angle_in_degrees = num_input
-                    # Ensure input is a number before converting
                     if isinstance(angle_in_degrees, (int, float)):
-                        angle_in_radians = radians(angle_in_degrees)  # Convert degrees to radians for calculations
-
+                        angle_in_radians = radians(angle_in_degrees)
                         if operation == "sin":
                             result_rad = sin(angle_in_radians)
                             result_deg = degrees(result_rad)
-                            print(f"{angle_in_degrees}° = {result_deg} °")  # Result in degrees is just conversio
+                            print(f"{angle_in_degrees}° = {result_deg} °")
                         elif operation == "cos":
                             result_rad = cos(angle_in_radians)
                             result_deg = degrees(result_rad)
@@ -1193,15 +1131,11 @@ while True:
                             result_rad = 1 / sin(angle_in_radians)
                             result_deg = degrees(result_rad)
                             print(f"{angle_in_degrees}° = {result_deg} °")
-
-                        # Inverse trigonometric functions return angles.
-                        # When 'degrees' is specified, we expect the input to be degrees of the *argument* for inverse functions.
-                        # The output of inverse functions should also be in degrees as requested by the unit input.
                         elif operation == "asin":
-                            if not -1 <= angle_in_degrees <= 1:  # Argument for inverse functions is [-1, 1]
+                            if not -1 <= angle_in_degrees <= 1:
                                 print("Error: You can only find the arcsine of a value between -1 and 1.")
                             else:
-                                result_rad = asin(angle_in_degrees)  # Calculate using the input as a value
+                                result_rad = asin(angle_in_degrees)
                                 result_deg = degrees(result_rad)
                                 print(f"asin({angle_in_degrees}) = {result_deg}°")
                         elif operation == "acos":
@@ -1220,13 +1154,11 @@ while True:
                                 result_rad = atan(1 / angle_in_degrees)
                             elif angle_in_degrees < 0:
                                 result_rad = atan(1 / angle_in_degrees) + pi
-                            else:  # angle_in_degrees == 0
+                            else:
                                 result_rad = pi / 2
                             result_deg = degrees(result_rad)
                             print(f"actg({angle_in_degrees}) = {result_deg}°")
                         elif operation == "asec":
-                            # Arccosecant expects an input value for which to find the angle.
-                            # The calculation uses 1/input for acos.
                             if not abs(angle_in_degrees) >= 1:
                                 print("Error: Invalid input for asec. Input must be >= 1 or <= -1.")
                             else:
@@ -1234,8 +1166,6 @@ while True:
                                 result_deg = degrees(result_rad)
                                 print(f"asec({angle_in_degrees}) = {result_deg}°")
                         elif operation == "acsc":
-                            # Arccosecant expects an input value for which to find the angle.
-                            # The calculation uses 1/input for asin.
                             if not abs(angle_in_degrees) >= 1:
                                 print("Error: Invalid input for acsc. Input must be >= 1 or <= -1.")
                             else:
@@ -1244,15 +1174,8 @@ while True:
                                 print(f"acsc({angle_in_degrees}) = {result_deg}°")
                     else:
                         print("Error: For 'degrees' mode, please enter a numerical value for calculations.")
-
-
                 elif gr == "radians":
-                    # If the user enters a number and specifies 'radians', we use the input directly
-                    # as it's already in the format that math functions expect.
-                    # We then convert the output to degrees for display.
-
-                    angle_in_radians = num_input  # Use the entered number as radians
-
+                    angle_in_radians = num_input
                     if isinstance(angle_in_radians, (int, float)):
                         if operation == "sin":
                             result_rad = sin(angle_in_radians)
@@ -1278,15 +1201,11 @@ while True:
                             result_rad = 1 / sin(angle_in_radians)
                             result_deg = degrees(result_rad)
                             print(f"{angle_in_radians} radians = {result_deg}°")
-
-                        # Inverse trigonometric functions take values and return angles.
-                        # When 'radians' is specified for the unit, we expect the input value for inverse functions.
-                        # The output angle will be in radians and can be converted to degrees.
                         elif operation == "asin":
-                            if not -1 <= angle_in_radians <= 1:  # Argument for inverse functions is [-1, 1]
+                            if not -1 <= angle_in_radians <= 1:
                                 print("Error: You can only find the arcsine of a value between -1 and 1.")
                             else:
-                                result_rad = asin(angle_in_radians)  # The input is the value, result is an angle in radians
+                                result_rad = asin(angle_in_radians)
                                 result_deg = degrees(result_rad)
                                 print(f"asin({angle_in_radians}) = {result_rad} radians")
                         elif operation == "acos":
@@ -1325,17 +1244,12 @@ while True:
                                 print(f"acsc({angle_in_radians}) = {result_rad} radians")
                     else:
                         print("Error: For 'radians' mode, please enter a numerical value for calculations.")
-
                 else:
                     print("Error! Choose the angle measure of the angle (degrees or radians)!")
                     break
-
-                # Ask the user if they wish to continue
                 cont = input("Continue? (y/n): ")
                 if cont.lower() != 'y':
                     break
-
-
         def block_classic():
             import functools
             import math
@@ -1429,8 +1343,6 @@ while True:
                             print("Error! Division by zero!")
                     else:
                         print("Unacceptable operation!")
-
-
         def block_compare():
             global factorial, pi, e, Fraction, sqrt, pow, cbrt, y, num1, num2, op
             factorial = math.factorial
@@ -1459,8 +1371,6 @@ while True:
                     print("Equality is equal")
                 else:
                     print("Enter operation")
-
-
         def multiplicity():
             while True:
                 try:
@@ -1481,8 +1391,6 @@ while True:
                     print("multiply")
                 else:
                     print("not multiply")
-
-
         def block_square():
             while True:
                 op = input(
@@ -1934,8 +1842,6 @@ while True:
                     except ValueError:
                         print("Ошибка! Некорректный ввод первого числа.")
                         break
-
-
         def block_progressive():
             op2 = input("1) Arithmetic progression 2) Geometric progression 3) Harmonic progression: ")
             if op2 == "1":
@@ -1957,8 +1863,6 @@ while True:
                 print("Harmonic progression constructed ↓")
                 for i in range(1, n + 1):
                     print(1 / i)
-
-
         def block_addition():
             while True:
                 try:
@@ -2016,7 +1920,6 @@ while True:
             print("7) progressive")
             print("8) exit")
             import time
-
             sin = math.sin
             tan = math.tan
             pi = math.pi
